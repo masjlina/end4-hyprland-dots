@@ -9,6 +9,7 @@
 import "modules/common"
 import "services"
 import "panelFamilies"
+import "custom" as Custom
 
 import QtQuick
 import QtQuick.Window
@@ -73,5 +74,6 @@ ShellRoot {
 
         onPressed: root.cyclePanelFamily()
     }
-}
 
+    Custom.MonitorModeWidget {}
+}
