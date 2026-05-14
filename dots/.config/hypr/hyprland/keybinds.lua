@@ -3,6 +3,9 @@ require("hyprland.variables")
 if is_file_exists(HOME .. "/.config/hypr/custom/variables.lua") then
     require("custom.variables")
 end
+if is_file_exists(HOME .. "/.config/hypr/custom/keybinds.lua") then
+    require("custom.keybinds")
+end
 
 local qsScripts = "$HOME/.config/quickshell/$qsConfig/scripts"
 local hyprScripts = "$HOME/.config/hypr/hyprland/scripts"
@@ -116,11 +119,7 @@ for i = 1, 6 do
     hl.bind("SUPER + " .. arrowkey[i], hl.dsp.focus({ direction = focusdir[i] }))
 end
 --#/# bind = SUPER + SHIFT, ←/↑/→/↓,, -- Move in direction
-for i = 1, 4 do
-    local arrowkey = { "Left", "Right", "Up", "Down" }
-    local focusdir = { "l", "r", "u", "d" }
-    hl.bind("SUPER + SHIFT + " .. arrowkey[i], hl.dsp.window.move({ direction = focusdir[i] }))
-end
+-- Disabled locally: custom/keybinds.lua remaps SUPER+SHIFT+Arrow to resize.
 
 hl.bind("ALT + F4",
     function() hl.exec_cmd(
@@ -200,7 +199,7 @@ end
 
 --#/# bind = CTRL+SUPER, ←/→,, -- Focus left/right
 --#/# bind = CTRL+SUPER+ALT, ←/→,, -- # [hidden] Focus busy left/right
-for i = 1, 4 do
+for i = 3, 4 do
     local key = { "CTRL + SUPER + ", "CTRL + SUPER + ALT + " }
     local keycombos = { key[1] .. "Right", key[1] .. "Left", key[2] .. "Right", key[2] .. "Left" }
     local prefix = { "r+", "r-", "m+", "m-" }
@@ -223,7 +222,7 @@ end
 --## Special
 hl.bind("SUPER + S", hl.dsp.workspace.toggle_special("special"), { description = "Workspace: Toggle scratchpad" })
 hl.bind("SUPER + mouse:275", hl.dsp.workspace.toggle_special("special"))
-for i = 1, 4 do
+for i = 1, 2 do
     local key = { "BracketLeft", "BracketRight", "Up", "Down" }
     local prefix = { "-1", "+1", "r-5", "r+5" }
     hl.bind("CTRL + SUPER + " .. key[i], hl.dsp.focus({ workspace = prefix[i] }))

@@ -31,6 +31,24 @@ end
 if is_file_exists(HOME .. "/.config/hypr/custom/keybinds.lua") then
     require("custom.keybinds")
 end
+if is_file_exists(HOME .. "/.config/hypr/custom/env.lua") then
+    require("custom.env")
+end
+if is_file_exists(HOME .. "/.config/hypr/custom/monitors.lua") then
+    require("custom.monitors")
+end
+if is_file_exists(HOME .. "/.config/hypr/custom/unityFix.lua") then
+    require("custom.unityFix")
+end
+if is_file_exists(HOME .. "/.config/hypr/custom/variables.lua") then
+    require("custom.variables")
+end
+if is_file_exists(HOME .. "/.config/hypr/custom/workspaces.lua") then
+    require("custom.workspaces")
+end
+
+
+
 
 -- nwg-displays support: re-add the files if it updates later
 -- require("workspaces")
