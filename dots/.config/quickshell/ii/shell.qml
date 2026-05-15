@@ -76,4 +76,5 @@ ShellRoot {
     }
 
     Custom.MonitorModeWidget {}
+    Custom.KeyboardLayoutWidget {}
 }

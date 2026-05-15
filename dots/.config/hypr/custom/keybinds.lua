@@ -203,3 +203,4 @@ hl.bind(
 -- ######## Shell ########
 
 hl.bind("CTRL + SUPER + M", hl.dsp.global("quickshell:monitorModeWidgetToggle"), { description = "Shell: Toggle monitor mode widget" })
+hl.bind("CTRL + SUPER + L", hl.dsp.global("quickshell:keyboardLayoutWidgetToggle"), { description = "Shell: Toggle keyboard layout widget" })
