@@ -112,7 +112,7 @@ hl.bind("SUPER + CTRL + SHIFT + RIGHT", hl.dsp.exec_cmd("moveintogroup r"))
 hl.bind("SUPER + CTRL + SHIFT + UP",    hl.dsp.exec_cmd("moveintogroup u"))
 hl.bind("SUPER + CTRL + SHIFT + DOWN",  hl.dsp.exec_cmd("moveintogroup d"))
 
-hl.bind("SUPER + CTRL + Q", hl.dsp.exec_cmd("moveoutofgroup"))
+hl.bind("SUPER + CTRL + Q", hl.dsp.window.move({out_of_group = true}))
 
 -- ######## Floating ########
 
