@@ -100,7 +100,7 @@ hl.bind(
 
 -- ######## Group ########
 
-hl.bind("SUPER + G", hl.dsp.group.toggle())
+hl.bind("SUPER + SHIFT + G", hl.dsp.group.toggle())
 
 hl.bind(
     "SUPER + CTRL + SHIFT + TAB",
@@ -118,7 +118,7 @@ hl.bind("SUPER + CTRL + Q", hl.dsp.window.move({out_of_group = true}))
 
 hl.bind(
     "SUPER + SHIFT + F",
-    hl.dsp.exec_cmd("togglefloating"),
+    hl.dsp.window.float("toggle"),
     { description = "Toggle floating" }
 )
 
