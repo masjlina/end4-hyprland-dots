@@ -50,9 +50,13 @@ end
 
 
 
--- nwg-displays support: re-add the files if it updates later
--- require("workspaces")
--- require("monitors")
+-- nwg-displays support --
+if is_file_exists(HOME .. "/.config/hypr/workspaces.lua") then
+    require("workspaces")
+end
+if is_file_exists(HOME .. "/.config/hypr/monitors.lua") then
+    require("monitors")
+end
 
 -- Shell overrides --
 require("hyprland.shellOverrides.main")
