@@ -16,6 +16,7 @@ Singleton {
 
     property bool wifi: true
     property bool ethernet: false
+    property bool vpnConnected: false
 
     property bool wifiEnabled: false
     property bool wifiScanning: false
@@ -189,6 +190,7 @@ Singleton {
             let hasEthernet = false;
             let hasWifi = false;
             let wifiStatus = "disconnected";
+            let hasVpn = false;
             lines.forEach(line => {
                 if (line.includes("ethernet") && line.includes("connected"))
                     hasEthernet = true;
@@ -212,10 +214,15 @@ Singleton {
                         wifiStatus = "disabled"
                     }
                 }
+
+                if ((line.includes("vpn") || line.includes("wireguard") || line.includes("tun") || line.includes("tap")) && line.includes("connected")) {
+                    hasVpn = true;
+                }
             });
             root.wifiStatus = wifiStatus;
             root.ethernet = hasEthernet;
             root.wifi = hasWifi;
+            root.vpnConnected = hasVpn;
         }
     }
 

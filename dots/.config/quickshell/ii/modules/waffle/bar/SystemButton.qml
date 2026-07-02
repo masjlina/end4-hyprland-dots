@@ -41,6 +41,12 @@ BarButton {
                 }
             }
 
+            FluentIcon {
+                icon: "globe-shield"
+                anchors.verticalCenter: parent.verticalCenter
+                visible: Network.vpnConnected
+            }
+
             IconHoverArea {
                 id: volumeHoverArea
                 iconItem: FluentIcon {
