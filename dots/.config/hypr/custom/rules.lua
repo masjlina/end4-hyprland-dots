@@ -5,9 +5,10 @@
 
 hl.window_rule({
     match = {
-        class = "librewriter"
+        class = "^libreoffice-.*$"
     },
-    suppress_event = "maximize"
+    tile = true,
+    suppress_event = "maximize fullscreen"
 })
 
 hl.window_rule({
@@ -85,4 +86,34 @@ hl.window_rule({
         title = "^\\s$"
     },
     no_focus = true
+})
+
+-- Godot
+hl.window_rule({
+    name = "godot-main-editor",
+    match = {
+        class = "^org%.godotengine%.Editor$",
+        title = "Godot Engine$"
+    },
+    float = false,
+})
+
+-- Godot project editor
+hl.window_rule({
+    name = "godot-submenus-focus",
+    match = {
+        class = "^org%.godotengine%.Editor$",
+        float = true
+    },
+    float = true,
+    focus_on_activate = true,
+})
+
+-- Godot project manager
+hl.window_rule({
+    name = "godot-project-manager",
+    match = {
+        class = "^org%.godotengine%.ProjectManager$"
+    },
+    float = false,
 })
