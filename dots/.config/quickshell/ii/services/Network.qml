@@ -22,6 +22,7 @@ Singleton {
     property bool wifiScanning: false
     property bool wifiConnecting: connectProc.running
     property WifiAccessPoint wifiConnectTarget
+    property WifiAccessPoint pendingConnectTarget
     readonly property list<WifiAccessPoint> wifiNetworks: []
     readonly property WifiAccessPoint active: wifiNetworks.find(n => n.active) ?? null
     readonly property list<var> friendlyWifiNetworks: [...wifiNetworks].sort((a, b) => {
@@ -71,10 +72,22 @@ Singleton {
 
     function connectToWifiNetwork(accessPoint: WifiAccessPoint): void {
         accessPoint.askingPassword = false;
-        root.wifiConnectTarget = accessPoint;
-        // We use this instead of `nmcli connection up SSID` because this also creates a connection profile
-        connectProc.exec(["nmcli", "dev", "wifi", "connect", accessPoint.ssid])
 
+        if (changePasswordProc.running) {
+            changePasswordProc.running = false;
+        }
+
+        if (connectProc.running) {
+            if (root.wifiConnectTarget === accessPoint) {
+                return;
+            }
+            root.pendingConnectTarget = accessPoint;
+            connectProc.running = false;
+            return;
+        }
+
+        root.wifiConnectTarget = accessPoint;
+        connectProc.exec(["nmcli", "dev", "wifi", "connect", accessPoint.ssid])
     }
 
     function disconnectWifiNetwork(): void {
@@ -88,6 +101,7 @@ Singleton {
     function changePassword(network: WifiAccessPoint, password: string, username = ""): void {
         // TODO: enterprise wifi with username
         network.askingPassword = false;
+        root.wifiConnectTarget = network;
         changePasswordProc.exec({
             "environment": {
                 "PASSWORD": password,
@@ -117,13 +131,27 @@ Singleton {
             onRead: line => {
                 // print("err:", line)
                 if (line.includes("Secrets were required")) {
-                    root.wifiConnectTarget.askingPassword = true
+                    if (root.wifiConnectTarget) {
+                        root.wifiConnectTarget.askingPassword = true;
+                    }
                 }
             }
         }
         onExited: (exitCode, exitStatus) => {
-            root.wifiConnectTarget.askingPassword = (exitCode !== 0)
-            root.wifiConnectTarget = null
+            const finishedTarget = root.wifiConnectTarget;
+            root.wifiConnectTarget = null;
+
+            if (finishedTarget && !root.pendingConnectTarget) {
+                finishedTarget.askingPassword = (exitCode !== 0);
+            }
+
+            if (root.pendingConnectTarget) {
+                const nextTarget = root.pendingConnectTarget;
+                root.pendingConnectTarget = null;
+                root.connectToWifiNetwork(nextTarget);
+            } else {
+                getNetworks.running = true;
+            }
         }
     }
 
@@ -136,9 +164,10 @@ Singleton {
 
     Process {
         id: changePasswordProc
-        onExited: { // Re-attempt connection after changing password
-            connectProc.running = false
-            connectProc.running = true
+        onExited: (exitCode, exitStatus) => {
+            if (root.wifiConnectTarget && !root.pendingConnectTarget) {
+                connectProc.exec(["nmcli", "dev", "wifi", "connect", root.wifiConnectTarget.ssid]);
+            }
         }
     }
 
