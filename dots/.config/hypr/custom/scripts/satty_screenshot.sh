@@ -34,9 +34,9 @@ if $grim_cmd "$temp_file"; then
     # Check if the output file was saved/copied
     if [ -f "$save_path" ]; then
         wl-copy -t image/png < "$save_path"
-        action=$(notify-send -i "$save_path" -a 'Screenshot' 'Скриншот сохранен' "Сохранено в $save_path и скопировано в буфер" --action="open=Открыть папку")
+        action=$(notify-send -i "$save_path" -a 'Screenshot' 'Screenshot saved' "Saved to $save_path and copied to clipboard" --action="open=Open folder")
         if [ "$action" = "open" ]; then
-            xdg-open "$(dirname "$save_path")"
+            thunar "$(dirname "$save_path")" || dolphin "$(dirname "$save_path")" || xdg-open "$(dirname "$save_path")"
         fi
     fi
 fi

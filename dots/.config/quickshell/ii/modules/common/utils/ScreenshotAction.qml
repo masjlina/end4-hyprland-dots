@@ -77,9 +77,9 @@ Singleton {
                     `mkdir -p '${StringUtils.shellSingleQuoteEscape(finalSaveDir)}' && \
                     ${cropToStdout} | tee >(wl-copy) > '${StringUtils.shellSingleQuoteEscape(savePath)}' && \
                     ${cleanup} && \
-                    action=\$(notify-send -i '${StringUtils.shellSingleQuoteEscape(savePath)}' -a 'Screenshot' 'Скриншот сохранен' 'Сохранено в ${StringUtils.shellSingleQuoteEscape(savePath)} и скопировано в буфер' --action='open=Открыть папку') && \
+                    action=\$(notify-send -i '${StringUtils.shellSingleQuoteEscape(savePath)}' -a 'Screenshot' 'Screenshot saved' 'Saved to ${StringUtils.shellSingleQuoteEscape(savePath)} and copied to clipboard' --action='open=Open folder') && \
                     if [ "\$action" = "open" ]; then \
-                        xdg-open '${StringUtils.shellSingleQuoteEscape(finalSaveDir)}'; \
+                        thunar '${StringUtils.shellSingleQuoteEscape(finalSaveDir)}' || dolphin '${StringUtils.shellSingleQuoteEscape(finalSaveDir)}' || xdg-open '${StringUtils.shellSingleQuoteEscape(finalSaveDir)}'; \
                     fi`
                 ]
                 break;
@@ -92,9 +92,9 @@ Singleton {
                         ${cleanup} && \
                         if [ -f '${StringUtils.shellSingleQuoteEscape(savePath)}' ]; then \
                             wl-copy -t image/png < '${StringUtils.shellSingleQuoteEscape(savePath)}' && \
-                            action=\$(notify-send -i '${StringUtils.shellSingleQuoteEscape(savePath)}' -a 'Screenshot' 'Скриншот сохранен' 'Сохранено в ${StringUtils.shellSingleQuoteEscape(savePath)} и скопировано в буфер' --action='open=Открыть папку') && \
+                            action=\$(notify-send -i '${StringUtils.shellSingleQuoteEscape(savePath)}' -a 'Screenshot' 'Screenshot saved' 'Saved to ${StringUtils.shellSingleQuoteEscape(savePath)} and copied to clipboard' --action='open=Open folder') && \
                             if [ "\$action" = "open" ]; then \
-                                xdg-open '${StringUtils.shellSingleQuoteEscape(finalSaveDir)}'; \
+                                thunar '${StringUtils.shellSingleQuoteEscape(finalSaveDir)}' || dolphin '${StringUtils.shellSingleQuoteEscape(finalSaveDir)}' || xdg-open '${StringUtils.shellSingleQuoteEscape(finalSaveDir)}'; \
                             fi; \
                         fi`
                     ]

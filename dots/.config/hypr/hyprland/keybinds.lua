@@ -70,7 +70,7 @@ hl.bind("SUPER + Period", hl.dsp.exec_cmd(
     { description = "Utilities: Emoji >> clipboard" })
 hl.bind("SUPER + SHIFT + S", hl.dsp.global("quickshell:regionScreenshot"), { description = "Utilities: Screen snip" })
 hl.bind("SUPER + SHIFT + S",
-    hl.dsp.exec_cmd(qsIsAlive .. " || pidof slurp || (mkdir -p $(xdg-user-dir PICTURES)/Screenshots/$(date '+%Y-%m') && activeWin=$(hyprctl activewindow -j | jq -r '.title') && cleanTitle=$(echo \"$activeWin\" | sed 's/[^a-zA-Z0-9_-]/_/g' | cut -c1-50) && if [ -z \"$cleanTitle\" ] || [ \"$cleanTitle\" = \"null\" ]; then cleanTitle=\"screenshot\"; fi && savePath=$(xdg-user-dir PICTURES)/Screenshots/$(date '+%Y-%m')/${cleanTitle}_$(date '+%Y-%m-%d_%H.%M.%S').png && hyprshot --freeze --mode region --clipboard-only --silent -o /tmp -f screenshot.png && mv /tmp/screenshot.png \"$savePath\" && wl-copy -t image/png < \"$savePath\" && action=$(notify-send -i \"$savePath\" -a 'Screenshot' 'Скриншот сохранен' \"Сохранено в $savePath и скопировано в буфер\" --action='open=Открыть папку') && if [ \"$action\" = \"open\" ]; then xdg-open $(dirname \"$savePath\"); fi)"))
+    hl.dsp.exec_cmd(qsIsAlive .. " || pidof slurp || (mkdir -p $(xdg-user-dir PICTURES)/Screenshots/$(date '+%Y-%m') && activeWin=$(hyprctl activewindow -j | jq -r '.title') && cleanTitle=$(echo \"$activeWin\" | sed 's/[^a-zA-Z0-9_-]/_/g' | cut -c1-50) && if [ -z \"$cleanTitle\" ] || [ \"$cleanTitle\" = \"null\" ]; then cleanTitle=\"screenshot\"; fi && savePath=$(xdg-user-dir PICTURES)/Screenshots/$(date '+%Y-%m')/${cleanTitle}_$(date '+%Y-%m-%d_%H.%M.%S').png && hyprshot --freeze --mode region --clipboard-only --silent -o /tmp -f screenshot.png && mv /tmp/screenshot.png \"$savePath\" && wl-copy -t image/png < \"$savePath\" && action=$(notify-send -i \"$savePath\" -a 'Screenshot' 'Screenshot saved' \"Saved to $savePath and copied to clipboard\" --action='open=Open folder') && if [ \"$action\" = \"open\" ]; then thunar $(dirname \"$savePath\") || dolphin $(dirname \"$savePath\") || xdg-open $(dirname \"$savePath\"); fi)"))
 hl.bind("SUPER + SHIFT + A", hl.dsp.global("quickshell:regionSearch"), { description = "Utilities: Google Lens" })
 hl.bind("SUPER + SHIFT + A", hl.dsp.exec_cmd(qsIsAlive .. " || pidof slurp || " .. hyprScripts .. "/snip_to_search.sh"))
 --# OCR
@@ -96,6 +96,15 @@ hl.bind("SUPER + SHIFT + ALT + R", hl.dsp.exec_cmd(qsScripts .. "/videos/record.
     { locked = true, description = "Utilities: Record screen (with sound)" })
 --# Fullscreen screenshot
 local grimhyprctl = "grim -o \"$(hyprctl activeworkspace -j | jq -r '.monitor')\""
+hl.bind("Print", hl.dsp.exec_cmd(
+    "mkdir -p $(xdg-user-dir PICTURES)/Screenshots/$(date '+%Y-%m') && " ..
+    "activeWin=$(hyprctl activewindow -j | jq -r '.title') && " ..
+    "cleanTitle=$(echo \"$activeWin\" | sed 's/[^a-zA-Z0-9_-]/_/g' | cut -c1-50) && " ..
+    "if [ -z \"$cleanTitle\" ] || [ \"$cleanTitle\" = \"null\" ]; then cleanTitle=\"screenshot\"; fi && " ..
+    "savePath=$(xdg-user-dir PICTURES)/Screenshots/$(date '+%Y-%m')/${cleanTitle}_$(date '+%Y-%m-%d_%H.%M.%S').png && " ..
+    grimhyprctl .. " - | tee \"$savePath\" | wl-copy && " ..
+    "action=$(notify-send -i \"$savePath\" -a 'Screenshot' 'Screenshot saved' \"Saved to $savePath and copied to clipboard\" --action='open=Open folder') && if [ \"$action\" = \"open\" ]; then thunar $(dirname \"$savePath\") || dolphin $(dirname \"$savePath\") || xdg-open $(dirname \"$savePath\"); fi"
+), { locked = true, description = "Utilities: Screenshot >> file & clipboard" })
 
 --# AI
 hl.bind("SUPER + SHIFT + ALT + mouse:273", hl.dsp.exec_cmd(hyprScripts .. "/ai/primary-buffer-query.sh"),
