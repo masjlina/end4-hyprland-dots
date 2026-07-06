@@ -21,7 +21,7 @@ QuickToggleModel {
         interval: 300
         repeat: false
         onTriggered: {
-            Quickshell.execDetached(["qs", "-p", Quickshell.shellPath(""), "ipc", "call", "region", "screenshot"]);
+            Quickshell.execDetached(["bash", "-c", "~/.config/hypr/custom/scripts/satty_screenshot.sh"]);
         }
     }
 

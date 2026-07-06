@@ -144,7 +144,7 @@ PanelWindow {
 
             property bool isWindowSelection: root.selectionMode === WRegionSelectionPanel.SelectionMode.Window
             property var hoveredWindow: root.windows.find(w => {
-                const inCurrentWorkspace = w.workspace.id === HyprlandData.activeWorkspace.id;
+                const inCurrentWorkspace = w.workspace?.id === HyprlandData.activeWorkspace?.id;
                 const withinXRange = w.at[0] <= dragArea.mouseX && dragArea.mouseX <= w.at[0] + w.size[0];
                 const withinYRange = w.at[1] <= dragArea.mouseY && dragArea.mouseY <= w.at[1] + w.size[1];
                 return inCurrentWorkspace && withinXRange && withinYRange;
@@ -159,6 +159,16 @@ PanelWindow {
                 if (selectionWidth === 0 || selectionHeight === 0) {
                     return;
                 }
+                const centerX = dragArea.selectionX + dragArea.selectionWidth / 2;
+                const centerY = dragArea.selectionY + dragArea.selectionHeight / 2;
+                const hoveredWin = root.windows.find(w => {
+                    const inCurrentWorkspace = w.workspace?.id === HyprlandData.activeWorkspace?.id;
+                    const withinXRange = w.at[0] <= centerX && centerX <= w.at[0] + w.size[0];
+                    const withinYRange = w.at[1] <= centerY && centerY <= w.at[1] + w.size[1];
+                    return inCurrentWorkspace && withinXRange && withinYRange;
+                });
+                const windowTitle = hoveredWin ? hoveredWin.title : "Desktop";
+
                 const screenshotDir = Config.options.screenSnip.savePath !== "" ? Config.options.screenSnip.savePath : "";
                 const screenshotAction = root.getScreenshotAction();
                 const command = ScreenshotAction.getCommand(dragArea.selectionX * root.monitorScale //
@@ -167,7 +177,8 @@ PanelWindow {
                 , dragArea.selectionHeight * root.monitorScale //
                 , root.screenshotPath //
                 , screenshotAction //
-                , screenshotDir); // yo wtf is this formatting qmlls do be funnie
+                , screenshotDir //
+                , windowTitle);
                 snipProc.command = command;
 
                 // Image post-processing

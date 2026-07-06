@@ -165,13 +165,11 @@ hl.bind(
 
 -- ######## Screenshot ########
 
-hl.unbind("CTRL + PRINT")
+hl.unbind("CTRL + Print")
 
 hl.bind(
-    "CTRL + PRINT",
-    hl.dsp.exec_cmd(
-        'mkdir -p $(xdg-user-dir PICTURES)/Screenshots && grim -g "$(slurp)" - | tee $(xdg-user-dir PICTURES)/Screenshots/Screenshot_"$(date \'+%Y-%m-%d_%H.%M.%S\')".png | wl-copy'
-    )
+    "CTRL + Print",
+    hl.dsp.exec_cmd("~/.config/hypr/custom/scripts/satty_screenshot.sh")
 )
 
 -- ######## Workspace switching ########

@@ -77,15 +77,17 @@ hl.window_rule({
         class = "^(.*jetbrains.*)$",
         title = "^\\s$"
     },
-    no_initial_focus = true
+    no_initial_focus = true,
+    no_focus = true
 })
 
+-- Fix Settings window
 hl.window_rule({
     match = {
         class = "^(.*jetbrains.*)$",
-        title = "^\\s$"
+        title = "^(Settings)$"
     },
-    no_focus = true
+    stay_focused = true
 })
 
 -- Godot

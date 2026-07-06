@@ -81,7 +81,7 @@ PanelWindow {
     property var mouseButton: null
     property var imageRegions: []
     readonly property list<var> windowRegions: RegionFunctions.filterWindowRegionsByLayers(
-        root.windows.filter(w => w.workspace.id === root.activeWorkspaceId),
+        root.windows.filter(w => w.workspace?.id === root.activeWorkspaceId),
         root.layerRegions
     ).map(window => {
         return {
@@ -276,6 +276,16 @@ PanelWindow {
             root.action = root.mouseButton === Qt.RightButton ? RegionSelection.SnipAction.Edit : RegionSelection.SnipAction.Copy;
         }
         
+        const centerX = root.regionX + root.regionWidth / 2;
+        const centerY = root.regionY + root.regionHeight / 2;
+        const hoveredWin = root.windows.find(w => {
+            const inCurrentWorkspace = w.workspace?.id === HyprlandData.activeWorkspace?.id;
+            const withinXRange = w.at[0] <= centerX && centerX <= w.at[0] + w.size[0];
+            const withinYRange = w.at[1] <= centerY && centerY <= w.at[1] + w.size[1];
+            return inCurrentWorkspace && withinXRange && withinYRange;
+        });
+        const windowTitle = hoveredWin ? hoveredWin.title : "Desktop";
+
         const screenshotDir = Config.options.screenSnip.savePath !== "" ? //
             Config.options.screenSnip.savePath : "";
         var screenshotAction = root.getScreenshotAction();
@@ -286,7 +296,8 @@ PanelWindow {
             root.regionHeight * root.monitorScale, //
             root.screenshotPath, //
             screenshotAction, //
-            screenshotDir
+            screenshotDir, //
+            windowTitle
         )
         Quickshell.execDetached(command);
         if (root.action == RegionSelection.SnipAction.Record || root.action == RegionSelection.SnipAction.RecordWithSound) {
