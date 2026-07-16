@@ -18,5 +18,4 @@ __pycache__/
 dots/.config/hypr/hyprland/colors.lua
 dots/.config/hypr/hyprlock/colors.conf
 dots/.config/hypr/custom/rules.lua
-dots/.config/hypr/hyprland/colors.lua
-dots/.config/hypr/hyprlock/colors.conf
+dots/.config/hypr/custom/rules.conf
